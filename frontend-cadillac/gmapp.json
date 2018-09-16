@@ -1,0 +1,16 @@
+{
+  "name":"HackMIT Recommends",
+  "id":"94885910",
+  "template": "DriverFirst",
+  "theme" : {"primary": "transparent"},
+  "version": "0.0.0",
+  "src": "src",
+  "dist": "dist",
+  "main": "app.js",
+  "icon": "Icon.png",
+  "developer": "The P'lodge",
+  "category": "Audio",
+  "type": "RemoteHigh",
+  "description": "Generated on 2018-9-15 19:41:56 by ngi-sdk version ",
+  "trusted": true
+}

@@ -10,6 +10,10 @@
 from bottle import route, request, response, template, run
 import recommend
 
+@route('/hello')
+def hello_world():
+    return("Hello World!!")
+
 @route('/rec')
 def get_recommendation():
     return recommend.get_rec(request.query['user_id'])
@@ -18,6 +22,6 @@ def get_recommendation():
 def add_like():
     return recommend.add_like(request.query['user_id'],request.query['title'])
 
-run(host='localhost', port=8080)
+run(host='0.0.0.0', port=8080)
     
 
