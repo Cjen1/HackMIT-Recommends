@@ -16,7 +16,7 @@ def get_recommendation():
 
 @route('/like')
 def add_like():
-    return recommend.add_like(request.query['user_id','title'])
+    return recommend.add_like(request.query['user_id'],request.query['title'])
 
 run(host='localhost', port=8080)
     
