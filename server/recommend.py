@@ -28,6 +28,8 @@ def add_like(user_id, title):
     except FileNotFoundError as ex:
         print("No file found, setting liked = {}")
 
+
+
     if not user_id in liked:
         liked[user_id] = []
 
@@ -40,7 +42,7 @@ def add_like(user_id, title):
     except FileNotFoundError as ex:
         print("No file found, setting liked = {}")
 
-    return json.dumps(liked)
+    return json.dumps(liked[user_id])
 
 def get_rec(user_id, n = 1):
     liked = {}
