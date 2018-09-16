@@ -34,11 +34,8 @@ ngi.flow('menu', {
     layout: 'VerticalList',
 	beforeEnter: function() {
 		if (!ngi.state.has('id')) {
-			console.log("No user id, need to query the server for a new one!");
-			//http.sendstuff, gimme new id
-			//.then(function(response) {
-			//	ngi.state.set(response.payload.id);
-			//}
+			console.log("No user id, need to get one!");
+			ngi.state.set('id', 'cjen1');
 		}
 	},
     listActions: [{
@@ -82,7 +79,14 @@ ngi.flow('addLikes', {
 			label: 'Yes',
 			action: function() {
 				var podcast = ngi.state.get('candidateLikedPodcast')
-				//http.SendStuffToOurServer(podcast.Stuff);
+				ngi.http({
+				  url: 'http://168.62.163.47:8080/like',
+				  queryParams : {
+					  'title' : podcast.collectionName,
+					  'user_id' : ngi.state.get('id')
+				  },
+				  verb: 'GET'
+				});
 				console.log("Liked podcast", podcast);
 				this.exit('menu');
 			}			
@@ -134,12 +138,12 @@ ngi.form("addLikes.addLikesForm", {
     }
  } );
 
-ngi.cards('play.recommendations', /*{
+ngi.cards('play.recommendations', {
 	remote: {
-      url: 'https our server url goes here yay dot com/',
+      url: 'http://168.62.163.47:8080/rec',
       lifetime: 'route',
       prepare: function(config) {
-        config.headers = {
+        config.queryParams = {
           'user_id': ngi.state.get('id')
         };
         return config;
@@ -148,14 +152,14 @@ ngi.cards('play.recommendations', /*{
 		  if (payload.length > 0) {
 			 return payload.map(function(item) {
 				 return {
-					title: item.podcastName,
-					images: [item.picture],
+					title: item.title,
+					//images: [item.picture],
 					media: {
-					  source: item.source,
-					  artist: item.artist,
-					  title: item.episodeTitle,
-					  album: item.podcastName,
-					  length: item.length
+					  source: item['rss-latest'],
+					  //artist: item.artist,
+					  title: item.title,
+					  //album: item.podcastName,
+					  //length: item.length
 					}
 				 }
 			 });
@@ -166,8 +170,11 @@ ngi.cards('play.recommendations', /*{
 				body: 'Go to the menu and like some podcasts in order to get recommendations!'
 			}]
 		  }
-	}}}*/
-	  [{
+		  /*return {
+			  title : payload
+		  }*/
+	}}}
+	  /*[{
 		  title: 'Hello Internet',
 		  images: ['http://static1.squarespace.com/static/52d66949e4b0a8cec3bcdd46/t/52ebf67fe4b0f4af2a4502d8/1391195777839/1500w/Hello+Internet.003.png'],
 		  media: {
@@ -177,7 +184,7 @@ ngi.cards('play.recommendations', /*{
 			  album: 'Hello Internet',
 			  length: 7209000
 		  }
-	  }]
+	  }]*/
     
   );
  
