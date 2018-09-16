@@ -6,9 +6,10 @@ import pandas
 from subprocess import call
 
 class Podcast:
-    def __init__(self, title, vec):
+    def __init__(self, title, vec, rss):
         self.title = title
         self.vec = np.array(vec)
+        self.rss = rss
 
     def cosine(self, p):
         v = p.vec
@@ -52,7 +53,7 @@ def get_rec(user_id, n = 1):
     df = pandas.read_json("trained_embeddings.json")
     podcasts = {
             row['title']:
-                Podcast(row['title'], row['vector']) 
+                Podcast(row['title'], row['vector'], row['rss']) 
             for i, row in df.iterrows()}
 
     if user_id not in liked:
@@ -64,13 +65,18 @@ def get_rec(user_id, n = 1):
         temp_distances = [(podcast.title, podcasts[title].cosine(podcast)) for _, podcast in podcasts.items()]
         for p_title, distance in temp_distances:
             distances[p_title] *= distance
-
     
     res_dists = [(k, d) for k, d in distances.items() if d != 0]
 
     res_dists.sort(key=lambda kv: kv[1])
 
-    return json.dumps(res_dists[:n])
+    
+    return [
+        {
+            'title':podcasts[title].title, 
+            'rss':podcasts[title].rss
+        }
+        for title, dist in res_dists[:n]]
 
 add_like("cjen1", "Nobody Told Me!")
 

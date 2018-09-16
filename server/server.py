@@ -9,6 +9,8 @@
 
 from bottle import route, request, response, template, run
 import recommend
+import feedparser
+import json
 
 @route('/hello')
 def hello_world():
@@ -16,7 +18,11 @@ def hello_world():
 
 @route('/rec')
 def get_recommendation():
-    return recommend.get_rec(request.query['user_id'])
+    recommendations = recommend.get_rec(request.query['user_id'])
+    for recommendation in recommendations:
+        d = feedparser.parse(recommendation['rss'])
+        recommendation['rss-latest'] = d.entries[0].enclosures[0].href
+    return json.dumps(recommendations)
 
 @route('/like')
 def add_like():
