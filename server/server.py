@@ -18,7 +18,7 @@ def hello_world():
 
 @route('/rec')
 def get_recommendation():
-    recommendations = recommend.get_rec(request.query['user_id'])
+    recommendations = recommend.get_rec(request.query['user_id'], n=5)
     for recommendation in recommendations:
         d = feedparser.parse(recommendation['rss'])
         recommendation['rss-latest'] = d.entries[0].enclosures[0].href
